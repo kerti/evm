@@ -1,0 +1,9 @@
+export DB_HOST="your.db.host"
+export DB_PORT=3306
+export DB_USER="your.db.username"
+export DB_PASS="your.db.password"
+export DB_NAME="your.db.name"
+export DB_CONN_LIMIT=10
+
+export SERVER_PORT=8080
+export SERVER_SHUTDOWN_PERIOD="0s"
