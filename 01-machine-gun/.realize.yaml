@@ -1,0 +1,23 @@
+settings:
+  legacy:
+    force: false
+    interval: 0s
+schema:
+  - name: evm-mg
+    path: .
+    commands:
+      install:
+        method: go build -o mg
+        status: true
+      run:
+        method: ./mg
+        status: true
+    watcher:
+      extensions:
+        - go
+      paths:
+        - /
+      ignored_paths:
+        - .git
+        - .realize
+        - vendor
