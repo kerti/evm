@@ -6,6 +6,9 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/kerti/evm/02-kitara-store/repository"
+	"github.com/kerti/evm/02-kitara-store/service"
+
 	"github.com/kerti/evm/02-kitara-store/config"
 	"github.com/kerti/evm/02-kitara-store/database"
 	"github.com/kerti/evm/02-kitara-store/handler"
@@ -29,13 +32,15 @@ func main() {
 	container.RegisterService("mysql", &db)
 
 	// Prepare containers - repositories
-	// ...
+	container.RegisterService("inventoryRepository", new(repository.InventoryMySQLRepo))
+	container.RegisterService("orderRepository", new(repository.OrderMySQLRepo))
 
 	// Prepare containers - services
-	// ...
+	container.RegisterService("orderService", new(service.OrderImpl))
 
 	// Prepare containers - handlers
 	container.RegisterService("healthHandler", new(handler.HealthImpl))
+	container.RegisterService("orderHandler", new(handler.OrderImpl))
 
 	// Prepare containers - HTTP server
 	var s server.Server

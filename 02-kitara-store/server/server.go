@@ -19,6 +19,7 @@ var isShuttingDown bool
 type Server struct {
 	config        *config.Config
 	HealthHandler handler.Health `inject:"healthHandler"`
+	OrderHandler  handler.Order  `inject:"orderHandler"`
 	router        *mux.Router
 }
 
