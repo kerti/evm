@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/kerti/evm/04-tennis-player/handler/response"
 	"github.com/kerti/evm/04-tennis-player/util/logger"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 // InitRoutes initializes the routes
@@ -17,6 +18,9 @@ func (s *Server) InitRoutes() {
 	s.router.Methods("OPTIONS").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		response.RespondWithNoContent(w)
 	})
+
+	// Swagger Docs
+	s.router.PathPrefix("/docs/").Handler(httpSwagger.WrapHandler)
 
 	// Health
 	s.router.HandleFunc("/health", s.HealthHandler.HandleHealthCheck).Methods("GET")

@@ -1,0 +1,87 @@
+definitions:
+  model.Container:
+    properties:
+      ballCount:
+        type: integer
+      capacity:
+        type: integer
+      id:
+        type: string
+      playerId:
+        type: string
+    type: object
+  model.Player:
+    properties:
+      containers:
+        items:
+          $ref: '#/definitions/model.Container'
+        type: array
+      id:
+        type: string
+      name:
+        type: string
+      readyToPlay:
+        type: boolean
+    type: object
+  model.PlayerAddBallInput:
+    properties:
+      playerId:
+        type: string
+    type: object
+  response.BaseResponse:
+    properties:
+      data:
+        type: object
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Submitted as part of Evermos Backend Engineer Assessment
+  license:
+    name: MIT
+  title: Tennis Player API
+  version: "1.0"
+paths:
+  /players/addBall:
+    post:
+      consumes:
+      - application/json
+      description: Add balls to containers belonging to a particular user.
+      parameters:
+      - description: Input specifying the player ID.
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.PlayerAddBallInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Player'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Add balls.
+      tags:
+      - players
+swagger: "2.0"

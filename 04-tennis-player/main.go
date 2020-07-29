@@ -8,6 +8,7 @@ import (
 
 	"github.com/kerti/evm/04-tennis-player/config"
 	"github.com/kerti/evm/04-tennis-player/database"
+	_ "github.com/kerti/evm/04-tennis-player/docs"
 	"github.com/kerti/evm/04-tennis-player/handler"
 	"github.com/kerti/evm/04-tennis-player/inject"
 	"github.com/kerti/evm/04-tennis-player/repository"
@@ -15,6 +16,11 @@ import (
 	"github.com/kerti/evm/04-tennis-player/service"
 	"github.com/kerti/evm/04-tennis-player/util/logger"
 )
+
+// @title Tennis Player API
+// @version 1.0
+// @description Submitted as part of Evermos Backend Engineer Assessment
+// @license.name MIT
 
 func main() {
 	// Register logger
