@@ -21,5 +21,8 @@ func (s *Server) InitRoutes() {
 	// Health
 	s.router.HandleFunc("/health", s.HealthHandler.HandleHealthCheck).Methods("GET")
 
+	// Orders
+	s.router.HandleFunc("/orders/process", s.OrderHandler.HandleProcessOrder).Methods("POST")
+
 	http.Handle("/", s.router)
 }
