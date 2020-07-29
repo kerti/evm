@@ -8,10 +8,23 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/kerti/evm/04-tennis-player/database"
 	"github.com/kerti/evm/04-tennis-player/model"
+	"github.com/kerti/evm/04-tennis-player/util/failure"
 	"github.com/kerti/evm/04-tennis-player/util/logger"
 )
 
 const (
+	queryInsertContainer = `
+		INSERT INTO containers (
+			containers.entity_id,
+			containers.player_entity_id,
+			containers.capacity,
+			containers.ball_count
+		) VALUES (
+			:entity_id,
+			:player_entity_id,
+			:capacity,
+			:ball_count)`
+
 	querySelectContainer = `
 		SELECT
 			containers.entity_id,
@@ -25,6 +38,8 @@ const (
 type Container interface {
 	Startup()
 	Shutdown()
+	ExistsByID(id uuid.UUID) (exists bool, err error)
+	Create(container model.Container) (err error)
 	ResolveByIDs(ids []uuid.UUID) (containers []model.Container, err error)
 	ResolveByPlayerID(playerID uuid.UUID) (containers []model.Container, err error)
 	TxBulkUpdate(tx *sqlx.Tx, containers []model.Container) (err error)
@@ -43,6 +58,47 @@ func (r *ContainerMySQLRepo) Startup() {
 // Shutdown cleans up everything and shuts down
 func (r *ContainerMySQLRepo) Shutdown() {
 	logger.Trace("Container repository shutting down...")
+}
+
+// ExistsByID checks whether a Container exists by its ID
+func (r *ContainerMySQLRepo) ExistsByID(id uuid.UUID) (exists bool, err error) {
+	err = r.DB.Get(
+		&exists,
+		"SELECT COUNT(entity_id) > 0 FROM containers WHERE containers.entity_id = ?",
+		id.String())
+	if err != nil {
+		logger.ErrNoStack("%v", err)
+	}
+	return
+}
+
+// Create creates a new Container
+func (r *ContainerMySQLRepo) Create(container model.Container) (err error) {
+	exists, err := r.ExistsByID(container.ID)
+	if err != nil {
+		logger.ErrNoStack("%v", err)
+		return err
+	}
+
+	if exists {
+		err = failure.OperationNotPermitted("create", "Container", "already exists")
+		logger.ErrNoStack("%v", err)
+		return err
+	}
+
+	stmt, err := r.DB.Prepare(queryInsertContainer)
+	if err != nil {
+		logger.ErrNoStack("%v", err)
+		return err
+	}
+
+	_, err = stmt.Exec(container)
+	if err != nil {
+		logger.ErrNoStack("%v", err)
+		return err
+	}
+
+	return nil
 }
 
 // ResolveByIDs resolves Containers by their IDs

@@ -10,6 +10,15 @@ definitions:
       playerId:
         type: string
     type: object
+  model.ContainerInput:
+    properties:
+      capacity:
+        type: integer
+      id:
+        type: string
+      playerId:
+        type: string
+    type: object
   model.Player:
     properties:
       containers:
@@ -52,6 +61,45 @@ info:
   title: Tennis Player API
   version: "1.0"
 paths:
+  /containers:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new Container.
+      parameters:
+      - description: Input in the form of Container JSON.
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.ContainerInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Container'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Create a Container.
+      tags:
+      - containers
   /health:
     get:
       description: |-

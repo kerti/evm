@@ -41,9 +41,11 @@ func main() {
 	container.RegisterService("playerRepository", new(repository.PlayerMySQLRepo))
 
 	// Prepare containers - services
+	container.RegisterService("containerService", new(service.ContainerImpl))
 	container.RegisterService("playerService", new(service.PlayerImpl))
 
 	// Prepare containers - handlers
+	container.RegisterService("containerHandler", new(handler.ContainerImpl))
 	container.RegisterService("healthHandler", new(handler.HealthImpl))
 	container.RegisterService("playerHandler", new(handler.PlayerImpl))
 
