@@ -38,8 +38,8 @@ func (h *PlayerImpl) Shutdown() {
 // @Summary Add balls.
 // @Description Add balls to containers belonging to a particular user.
 // @Tags players
-// @Accept  json
-// @Produce  json
+// @Accept json
+// @Produce json
 // @Param input body model.PlayerAddBallInput true "Input specifying the player ID."
 // @Success 200 {object} response.BaseResponse{data=model.Player}
 // @Failure 400 {object} response.BaseResponse

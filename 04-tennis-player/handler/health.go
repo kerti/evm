@@ -41,6 +41,15 @@ func (h *HealthImpl) Shutdown() {
 }
 
 // HandleHealthCheck handles the request
+// @Summary Health check.
+// @Description Performs a check on the server's health status.
+// @Description Returns HTTP 200/OK if healthy,
+// @Description returns HTTP 503/Service Unavailable otherwise.
+// @Tags health
+// @Produce json
+// @Success 200 {object} response.BaseResponse
+// @Failure 503 {object} response.BaseResponse
+// @Router /health [get]
 func (h *HealthImpl) HandleHealthCheck(w http.ResponseWriter, r *http.Request) {
 	if h.isHealthy {
 		response.RespondWithMessage(w, http.StatusOK, "OK")

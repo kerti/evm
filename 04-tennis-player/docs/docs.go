@@ -27,6 +27,32 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/health": {
+            "get": {
+                "description": "Performs a check on the server's health status.\nReturns HTTP 200/OK if healthy,\nreturns HTTP 503/Service Unavailable otherwise.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "health"
+                ],
+                "summary": "Health check.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/players/addBall": {
             "post": {
                 "description": "Add balls to containers belonging to a particular user.",
