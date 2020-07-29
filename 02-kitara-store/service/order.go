@@ -1,6 +1,8 @@
 package service
 
 import (
+	"sync"
+
 	"github.com/gofrs/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/kerti/evm/02-kitara-store/database"
@@ -21,6 +23,7 @@ type OrderImpl struct {
 	InventoryRepository repository.Inventory `inject:"inventoryRepository"`
 	OrderRepository     repository.Order     `inject:"orderRepository"`
 	DB                  *database.MySQL      `inject:"mysql"`
+	mux                 sync.Mutex
 }
 
 // Startup performs startup functions
@@ -35,6 +38,8 @@ func (s *OrderImpl) Shutdown() {
 
 // Process processes an order
 func (s *OrderImpl) Process(input model.OrderProcessInput) (*model.Order, error) {
+	s.mux.Lock()
+	defer s.mux.Unlock()
 
 	order, err := s.OrderRepository.ResolveByID(input.OrderID)
 	if err != nil {
