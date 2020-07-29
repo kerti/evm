@@ -26,6 +26,7 @@ type Container interface {
 	Startup()
 	Shutdown()
 	ResolveByIDs(ids []uuid.UUID) (containers []model.Container, err error)
+	ResolveByPlayerID(playerID uuid.UUID) (containers []model.Container, err error)
 	TxBulkUpdate(tx *sqlx.Tx, containers []model.Container) (err error)
 }
 
@@ -36,12 +37,12 @@ type ContainerMySQLRepo struct {
 
 // Startup perform startup functions
 func (r *ContainerMySQLRepo) Startup() {
-	logger.Trace("BankAccount repository starting up...")
+	logger.Trace("Container repository starting up...")
 }
 
 // Shutdown cleans up everything and shuts down
 func (r *ContainerMySQLRepo) Shutdown() {
-	logger.Trace("BankAccount repository shutting down...")
+	logger.Trace("Container repository shutting down...")
 }
 
 // ResolveByIDs resolves Containers by their IDs
@@ -51,6 +52,24 @@ func (r *ContainerMySQLRepo) ResolveByIDs(ids []uuid.UUID) (containers []model.C
 	}
 
 	query, args, err := r.DB.In(querySelectContainer+" WHERE containers.entity_id IN (?)", ids)
+	if err != nil {
+		logger.ErrNoStack("%v", err)
+		return
+	}
+
+	err = r.DB.Select(&containers, query, args...)
+	if err != nil {
+		logger.ErrNoStack("%v", err)
+	}
+
+	return
+}
+
+// ResolveByPlayerID resolves Containers by their Player IDs
+func (r *ContainerMySQLRepo) ResolveByPlayerID(playerID uuid.UUID) (containers []model.Container, err error) {
+	query, args, err := r.DB.In(
+		querySelectContainer+" WHERE containers.player_entity_id = ?",
+		playerID)
 	if err != nil {
 		logger.ErrNoStack("%v", err)
 		return

@@ -26,9 +26,9 @@ func (p *Player) AttachContainers(containers []Container) Player {
 }
 
 // AddBall adds a single ball randomly into one of the player's containers
-func (p *Player) AddBall() (Player, error) {
+func (p *Player) AddBall() error {
 	if err := p.ValidateAddBall(); err != nil {
-		return *p, err
+		return err
 	}
 
 	randomContainerIndex := rand.Intn(len(p.Containers))
@@ -51,7 +51,7 @@ func (p *Player) AddBall() (Player, error) {
 	}
 	p.Containers = containers
 
-	return *p, nil
+	return nil
 }
 
 // ValidateAddBall checks if the player can still add balls to one of his containers
