@@ -28,6 +28,13 @@ definitions:
       playerId:
         type: string
     type: object
+  model.PlayerInput:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
   response.BaseResponse:
     properties:
       data:
@@ -65,6 +72,45 @@ paths:
       summary: Health check.
       tags:
       - health
+  /players:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new Player.
+      parameters:
+      - description: Input in the form of Player JSON.
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.PlayerInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Player'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Create a Player.
+      tags:
+      - players
   /players/addBall:
     post:
       consumes:

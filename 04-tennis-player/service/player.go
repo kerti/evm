@@ -15,6 +15,7 @@ import (
 type Player interface {
 	Startup()
 	Shutdown()
+	Create(input model.PlayerInput) (*model.Player, error)
 	AddBall(playerID uuid.UUID) (*model.Player, error)
 }
 
@@ -34,6 +35,13 @@ func (s *PlayerImpl) Startup() {
 // Shutdown cleans up everything and shuts down
 func (s *PlayerImpl) Shutdown() {
 	logger.Trace("Player Service shutting down...")
+}
+
+// Create creates a new Player
+func (s *PlayerImpl) Create(input model.PlayerInput) (*model.Player, error) {
+	player := model.NewPlayerFromInput(input)
+	err := s.PlayerRepository.Create(player)
+	return &player, err
 }
 
 // AddBall adds a ball into one of the player's containers

@@ -16,6 +16,7 @@ import (
 type Player interface {
 	Startup()
 	Shutdown()
+	HandleCreate(w http.ResponseWriter, r *http.Request)
 	HandleAddBall(w http.ResponseWriter, r *http.Request)
 }
 
@@ -32,6 +33,35 @@ func (h *PlayerImpl) Startup() {
 // Shutdown cleans up everything and shuts down
 func (h *PlayerImpl) Shutdown() {
 	logger.Trace("Player Handler shutting down...")
+}
+
+// HandleCreate handles the request
+// @Summary Create a Player.
+// @Description Creates a new Player.
+// @Tags players
+// @Accept json
+// @Produce json
+// @Param input body model.PlayerInput true "Input in the form of Player JSON."
+// @Success 200 {object} response.BaseResponse{data=model.Player}
+// @Failure 400 {object} response.BaseResponse
+// @Failure 409 {object} response.BaseResponse
+// @Failure 500 {object} response.BaseResponse
+// @Router /players [post]
+func (h *PlayerImpl) HandleCreate(w http.ResponseWriter, r *http.Request) {
+	var input model.PlayerInput
+	err := json.NewDecoder(r.Body).Decode(&input)
+	if err != nil {
+		response.RespondWithError(w, failure.BadRequest(err))
+		return
+	}
+
+	player, err := h.PlayerService.Create(input)
+	if err != nil {
+		response.RespondWithError(w, err)
+		return
+	}
+
+	response.RespondWithJSON(w, http.StatusCreated, player)
 }
 
 // HandleAddBall handles the request
