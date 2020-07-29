@@ -21,5 +21,8 @@ func (s *Server) InitRoutes() {
 	// Health
 	s.router.HandleFunc("/health", s.HealthHandler.HandleHealthCheck).Methods("GET")
 
+	// Player
+	s.router.HandleFunc("/players/addBall", s.PlayerHandler.HandleAddBall).Methods("POST")
+
 	http.Handle("/", s.router)
 }
