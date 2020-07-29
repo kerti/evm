@@ -10,6 +10,7 @@ import (
 	"github.com/kerti/evm/04-tennis-player/database"
 	"github.com/kerti/evm/04-tennis-player/handler"
 	"github.com/kerti/evm/04-tennis-player/inject"
+	"github.com/kerti/evm/04-tennis-player/repository"
 	"github.com/kerti/evm/04-tennis-player/server"
 	"github.com/kerti/evm/04-tennis-player/util/logger"
 )
@@ -29,7 +30,8 @@ func main() {
 	container.RegisterService("mysql", &db)
 
 	// Prepare containers - repositories
-	// ...
+	container.RegisterService("containerRepository", new(repository.ContainerMySQLRepo))
+	container.RegisterService("playerRepository", new(repository.PlayerMySQLRepo))
 
 	// Prepare containers - services
 	// ...
