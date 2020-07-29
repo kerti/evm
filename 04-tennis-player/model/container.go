@@ -13,6 +13,20 @@ type Container struct {
 	BallCount int       `json:"ballCount" db:"ball_count" validate:"min=0"`
 }
 
+// NewContainerFromInput creates a new Container from its input object
+func NewContainerFromInput(input ContainerInput) Container {
+	id := input.ID
+	if input.ID == uuid.Nil {
+		id, _ = uuid.NewV4()
+	}
+	return Container{
+		ID:        id,
+		PlayerID:  input.PlayerID,
+		Capacity:  input.Capacity,
+		BallCount: 0,
+	}
+}
+
 // AddBall adds a single ball into a Container
 func (c *Container) AddBall() (Container, error) {
 	if c.IsFull() {
@@ -27,4 +41,11 @@ func (c *Container) AddBall() (Container, error) {
 // IsFull checks whether a ball can be added into a Container
 func (c *Container) IsFull() bool {
 	return c.Capacity == c.BallCount
+}
+
+// ContainerInput represents the input object for creating new Containers
+type ContainerInput struct {
+	ID       uuid.UUID `json:"id,omitempty"`
+	PlayerID uuid.UUID `json:"playerId"`
+	Capacity int       `json:"capacity"`
 }

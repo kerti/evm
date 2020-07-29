@@ -17,10 +17,11 @@ var isShuttingDown bool
 
 // Server is the server instance
 type Server struct {
-	config        *config.Config
-	HealthHandler handler.Health `inject:"healthHandler"`
-	PlayerHandler handler.Player `inject:"playerHandler"`
-	router        *mux.Router
+	config           *config.Config
+	ContainerHandler handler.Container `inject:"containerHandler"`
+	HealthHandler    handler.Health    `inject:"healthHandler"`
+	PlayerHandler    handler.Player    `inject:"playerHandler"`
+	router           *mux.Router
 }
 
 // Startup perform startup functions

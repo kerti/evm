@@ -15,6 +15,19 @@ type Player struct {
 	Containers  []Container `json:"containers" db:"-"`
 }
 
+// NewPlayerFromInput creates a new Player from its input object
+func NewPlayerFromInput(input PlayerInput) Player {
+	id := input.ID
+	if input.ID == uuid.Nil {
+		id, _ = uuid.NewV4()
+	}
+	return Player{
+		ID:          id,
+		Name:        input.Name,
+		ReadyToPlay: false,
+	}
+}
+
 // AttachContainers attaches containers to a player
 func (p *Player) AttachContainers(containers []Container) Player {
 	for _, container := range containers {
@@ -71,6 +84,12 @@ func (p *Player) ValidateAddBall() error {
 	}
 
 	return nil
+}
+
+// PlayerInput represents the input object for creating new Players
+type PlayerInput struct {
+	ID   uuid.UUID `json:"id,omitempty"`
+	Name string    `json:"name"`
 }
 
 // PlayerAddBallInput represents the input object for players to add balls
