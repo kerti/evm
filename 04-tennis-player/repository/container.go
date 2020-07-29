@@ -140,12 +140,12 @@ func (r *ContainerMySQLRepo) composeBulkUpdateQuery(containers []model.Container
 		strings.Join(fieldClauses, ", "),
 		strings.Join(entityIDs, ", "))
 
-	query, args, err := r.DB.In(q, param)
+	query, args, err := r.DB.NamedIn(q, param)
 	if err != nil {
 		return query, params, err
 	}
-	params = append(params, args...)
 
+	params = append(params, args...)
 	return
 }
 

@@ -39,6 +39,7 @@ func main() {
 
 	// Prepare containers - handlers
 	container.RegisterService("healthHandler", new(handler.HealthImpl))
+	container.RegisterService("playerHandler", new(handler.PlayerImpl))
 
 	// Prepare containers - HTTP server
 	var s server.Server

@@ -72,3 +72,8 @@ func (p *Player) ValidateAddBall() error {
 
 	return nil
 }
+
+// PlayerAddBallInput represents the input object for players to add balls
+type PlayerAddBallInput struct {
+	PlayerID uuid.UUID `json:"playerId"`
+}

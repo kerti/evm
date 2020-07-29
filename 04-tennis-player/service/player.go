@@ -1,6 +1,8 @@
 package service
 
 import (
+	"sync"
+
 	"github.com/gofrs/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/kerti/evm/04-tennis-player/database"
@@ -21,6 +23,7 @@ type PlayerImpl struct {
 	DB                  *database.MySQL      `inject:"mysql"`
 	ContainerRepository repository.Container `inject:"containerRepository"`
 	PlayerRepository    repository.Player    `inject:"playerRepository"`
+	mux                 sync.Mutex
 }
 
 // Startup performs startup functions
@@ -35,6 +38,9 @@ func (s *PlayerImpl) Shutdown() {
 
 // AddBall adds a ball into one of the player's containers
 func (s *PlayerImpl) AddBall(playerID uuid.UUID) (*model.Player, error) {
+	s.mux.Lock()
+	defer s.mux.Unlock()
+
 	player, err := s.PlayerRepository.ResolveByID(playerID)
 	if err != nil {
 		return nil, err
