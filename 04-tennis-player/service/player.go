@@ -41,7 +41,18 @@ func (s *PlayerImpl) Shutdown() {
 
 // ResolveByID resolves a Player by its ID
 func (s *PlayerImpl) ResolveByID(id uuid.UUID) (*model.Player, error) {
-	return s.PlayerRepository.ResolveByID(id)
+	player, err := s.PlayerRepository.ResolveByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	containers, err := s.ContainerRepository.ResolveByPlayerID(player.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	player.AttachContainers(containers)
+	return player, nil
 }
 
 // ResolvePage resolves a Page of Players based on page and page size parameters
