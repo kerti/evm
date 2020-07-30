@@ -75,6 +75,6 @@ func main() {
 			fmt.Printf("Possible solution found at Y = %d.\n", y)
 		}
 	} else {
-		fmt.Printf("No possible solutions found.\n")
+		fmt.Println("No possible solutions found.")
 	}
 }

@@ -41,9 +41,11 @@ the concurrency handling of the API.
 
 ## 03. Key Puzzle
 
-This is the solution to **Question 3 of Evermos Backend Engineer Assessment
-v1.1**. To run locally, simply go into `03-key-puzzle` directory and invoke
-`go run main.go`
+I did two versions of this puzzle, complying to **Question 3 of Evermos Backend
+Engineer Assessment** both **version 1.1** and **version 1.2**.
+
+To run locally, simply go into `03-key-puzzle/v11` or `03-key-puzzle/v12`
+directory and invoke `go run main.go`
 
 ## 04. Tennis Player API
 
