@@ -15,9 +15,10 @@ Assessment v1.1. **I later abandoned this in favor of v1.2**.
 > * [direnv](https://direnv.net/)
 
 This is the solution to **Question 2 of Evermos Backend Engineer Assessment
-v1.2**. This API is not available publicly and is deliberately minimal to
-emphasize on implementing concurrency handling as indicated in the problem
-statement.
+v1.2**, which is identical to **Question 2 of Evermos Backend Engineer
+Assessment v1.1**. This API is not available publicly and is deliberately
+minimal to emphasize on implementing concurrency handling as indicated in the
+problem statement.
 
 To run locally:
 
@@ -71,7 +72,7 @@ assumptions based on the problem statement:
 * Once a Container is full (verified), the Player is then ready to play and he
   cannot put any more balls into any of his Containers.
 
-## Testing
+## Testing the Functionality
 
 To test the API's functionality, I have included Swagger Docs UI that is
 available [here](http://tennis.evm.radityakertiyasa.com:8080/docs/index.html).
