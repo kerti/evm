@@ -113,6 +113,81 @@ paths:
       summary: Create a Container.
       tags:
       - containers
+  /containers/:
+    get:
+      description: Resolves a Page of Containers based on page and page size parameters.
+      parameters:
+      - description: The page number. Defaults to 1.
+        in: query
+        name: page
+        type: integer
+      - description: The number of records on a page. Defaults to 10.
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Page'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Resolve a Page of Containers.
+      tags:
+      - containers
+  /containers/{id}:
+    get:
+      description: Resolves a Container by its ID.
+      parameters:
+      - description: The Container's identifier.
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Container'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Resolve a Container.
+      tags:
+      - containers
   /health:
     get:
       description: |-

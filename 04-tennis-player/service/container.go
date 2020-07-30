@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/gofrs/uuid"
 	"github.com/kerti/evm/04-tennis-player/database"
 	"github.com/kerti/evm/04-tennis-player/model"
 	"github.com/kerti/evm/04-tennis-player/repository"
@@ -12,6 +13,8 @@ import (
 type Container interface {
 	Startup()
 	Shutdown()
+	ResolveByID(id uuid.UUID) (*model.Container, error)
+	ResolvePage(pageNum int, pageSize int) (*model.Page, error)
 	Create(input model.ContainerInput) (*model.Container, error)
 }
 
@@ -30,6 +33,25 @@ func (s *ContainerImpl) Startup() {
 // Shutdown cleans up everything and shuts down
 func (s *ContainerImpl) Shutdown() {
 	logger.Trace("Container Service shutting down...")
+}
+
+// ResolveByID resolves a Container by its ID
+func (s *ContainerImpl) ResolveByID(id uuid.UUID) (*model.Container, error) {
+	containers, err := s.ContainerRepository.ResolveByIDs([]uuid.UUID{id})
+	if err != nil {
+		return nil, err
+	}
+
+	if len(containers) == 0 {
+		return nil, failure.EntityNotFound("container")
+	}
+
+	return &containers[0], nil
+}
+
+// ResolvePage resolves a Page of Containers based on page and page size parameters
+func (s *ContainerImpl) ResolvePage(pageNum int, pageSize int) (*model.Page, error) {
+	return s.ContainerRepository.ResolvePage(pageNum, pageSize)
 }
 
 // Create creates a new Container

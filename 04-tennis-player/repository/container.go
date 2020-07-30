@@ -42,6 +42,7 @@ type Container interface {
 	Create(container model.Container) (err error)
 	ResolveByIDs(ids []uuid.UUID) (containers []model.Container, err error)
 	ResolveByPlayerID(playerID uuid.UUID) (containers []model.Container, err error)
+	ResolvePage(pageNum int, pageSize int) (page *model.Page, err error)
 	TxBulkUpdate(tx *sqlx.Tx, containers []model.Container) (err error)
 }
 
@@ -137,6 +138,41 @@ func (r *ContainerMySQLRepo) ResolveByPlayerID(playerID uuid.UUID) (containers [
 	}
 
 	return
+}
+
+// ResolvePage resolves a Page of Containers based on page and page size parameters
+func (r *ContainerMySQLRepo) ResolvePage(pageNum int, pageSize int) (page *model.Page, err error) {
+	offset := (pageNum - 1) * pageSize
+	query, args, err := r.DB.In(
+		querySelectContainer+" LIMIT ? OFFSET ?",
+		pageSize,
+		offset,
+	)
+	if err != nil {
+		logger.ErrNoStack("%v", err)
+		return
+	}
+
+	containers := make([]model.Container, 0)
+	err = r.DB.Select(&containers, query, args...)
+	if err != nil {
+		logger.ErrNoStack("%v", err)
+	}
+
+	var count int
+	err = r.DB.Get(&count, "SELECT COUNT(entity_id) FROM containers")
+	if err != nil {
+		return nil, err
+	}
+
+	page = &model.Page{
+		Items:      containers,
+		Page:       pageNum,
+		PageSize:   pageSize,
+		TotalCount: count,
+	}
+	page.CalculateTotalPages()
+	return page, nil
 }
 
 // TxBulkUpdate transactionally updates multiple containers with the transaction object passed from elsewhere
