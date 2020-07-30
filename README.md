@@ -20,7 +20,7 @@ Assessment v1.1**. This API is not available publicly and is deliberately
 minimal to emphasize on implementing concurrency handling as indicated in the
 problem statement.
 
-To run locally:
+### Running Locally
 
 1. Clone this repository.
 2. Go to `02-kitara-store` folder.
@@ -32,7 +32,7 @@ To run locally:
 The source code includes functional tests that are run concurrently to showcase
 the concurrency handling of the API.
 
-To test the concurrency feature:
+### Testing Concurrency Handling
 
 1. Have the API running as explained above.
 2. Open up a new terminal, go to `tests/functional` folder, then run `go test`.
@@ -59,7 +59,7 @@ This is the solution to **Question 1 of Evermos Backend Engineer Assessment
 v1.2**. This API is available publicly and testing can be done using the
 included Swagger Docs UI.
 
-## Assumptions
+### Assumptions
 
 To produce a reasonable API and logic within it, I made the following
 assumptions based on the problem statement:
@@ -72,7 +72,7 @@ assumptions based on the problem statement:
 * Once a Container is full (verified), the Player is then ready to play and he
   cannot put any more balls into any of his Containers.
 
-## Testing the Functionality
+### Testing the Functionality
 
 To test the API's functionality, I have included Swagger Docs UI that is
 available [here](http://tennis.evm.radityakertiyasa.com:8080/docs/index.html).
