@@ -28,6 +28,7 @@ const (
 		WHERE entity_id = :entity_id`
 )
 
+// Inventory is the Inventory repository interface
 type Inventory interface {
 	Startup()
 	Shutdown()
@@ -35,6 +36,7 @@ type Inventory interface {
 	TxUpdate(tx *sqlx.Tx, inventory model.Inventory) (err error)
 }
 
+// InventoryMySQLRepo is the repository for Inventory implemented with MySQL backend
 type InventoryMySQLRepo struct {
 	DB *database.MySQL `inject:"mysql"`
 }
