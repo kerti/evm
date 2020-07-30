@@ -15,6 +15,8 @@ import (
 type Player interface {
 	Startup()
 	Shutdown()
+	ResolveByID(uuid.UUID) (*model.Player, error)
+	ResolvePage(pageNum int, pageSize int) (*model.Page, error)
 	Create(input model.PlayerInput) (*model.Player, error)
 	AddBall(playerID uuid.UUID) (*model.Player, error)
 }
@@ -35,6 +37,16 @@ func (s *PlayerImpl) Startup() {
 // Shutdown cleans up everything and shuts down
 func (s *PlayerImpl) Shutdown() {
 	logger.Trace("Player Service shutting down...")
+}
+
+// ResolveByID resolves a Player by its ID
+func (s *PlayerImpl) ResolveByID(id uuid.UUID) (*model.Player, error) {
+	return s.PlayerRepository.ResolveByID(id)
+}
+
+// ResolvePage resolves a Page of Players based on page and page size parameters
+func (s *PlayerImpl) ResolvePage(pageNum int, pageSize int) (*model.Page, error) {
+	return s.PlayerRepository.ResolvePage(pageNum, pageSize)
 }
 
 // Create creates a new Player

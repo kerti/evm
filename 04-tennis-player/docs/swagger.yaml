@@ -19,6 +19,19 @@ definitions:
       playerId:
         type: string
     type: object
+  model.Page:
+    properties:
+      items:
+        type: object
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      totalCount:
+        type: integer
+      totalPages:
+        type: integer
+    type: object
   model.Player:
     properties:
       containers:
@@ -157,6 +170,81 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: Create a Player.
+      tags:
+      - players
+  /players/:
+    get:
+      description: Resolves a Page of Players based on page and page size parameters.
+      parameters:
+      - description: The page number. Defaults to 1.
+        in: query
+        name: page
+        type: integer
+      - description: The number of records on a page. Defaults to 10.
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Page'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Resolve a Page of Players.
+      tags:
+      - players
+  /players/{id}:
+    get:
+      description: Resolves a Player by its ID.
+      parameters:
+      - description: The Player's identifier.
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Player'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Resolve a Player.
       tags:
       - players
   /players/addBall:

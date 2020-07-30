@@ -83,6 +83,6 @@ The steps to test are as follows:
   like.
 * Invoke the `addBall` endpoint and observe the result. A single ball will
   added randomly into any one of the available Containers attached to the
-  Player. Do this until one of the Containers is full
+  Player. Do this until one of the Containers is full.
 * Once one of the Containers is full, you cannot invoke `addBall` on a Player
   because he is now ready to play.
