@@ -42,6 +42,7 @@ type Player interface {
 	ExistsByID(id uuid.UUID) (exists bool, err error)
 	Create(player model.Player) (err error)
 	ResolveByID(id uuid.UUID) (player *model.Player, err error)
+	ResolvePage(pageNum int, pageSize int) (page *model.Page, err error)
 	TxUpdate(tx *sqlx.Tx, player model.Player) (err error)
 }
 
@@ -111,6 +112,41 @@ func (r *PlayerMySQLRepo) ResolveByID(id uuid.UUID) (player *model.Player, err e
 	}
 
 	return
+}
+
+// ResolvePage resolves a Page of Players based on page and page size parameters
+func (r *PlayerMySQLRepo) ResolvePage(pageNum int, pageSize int) (page *model.Page, err error) {
+	offset := (pageNum - 1) * pageSize
+	query, args, err := r.DB.In(
+		querySelectPlayer+" LIMIT ? OFFSET ?",
+		pageSize,
+		offset,
+	)
+	if err != nil {
+		logger.ErrNoStack("%v", err)
+		return
+	}
+
+	players := make([]model.Player, 0)
+	err = r.DB.Select(&players, query, args...)
+	if err != nil {
+		logger.ErrNoStack("%v", err)
+	}
+
+	var count int
+	err = r.DB.Get(&count, "SELECT COUNT(entity_id) FROM players")
+	if err != nil {
+		return nil, err
+	}
+
+	page = &model.Page{
+		Items:      players,
+		Page:       pageNum,
+		PageSize:   pageSize,
+		TotalCount: count,
+	}
+	page.CalculateTotalPages()
+	return page, nil
 }
 
 // TxUpdate transactionally updates a Player with the transaction object passed from elsewhere
