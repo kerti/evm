@@ -1,3 +1,8 @@
+> ## Notice
+> This repository is no longer active as the assessment test is already
+> completed. All previously publicly available endpooints are no longer
+> available.
+
 # EVM Backend Assessment
 
 This repository contains all code that is submitted as part of Evermos Backend
